@@ -32,17 +32,19 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-      let email =  data.get('email')
-      let password =  data.get('password')
 
-      if(email === 'aman@gmail.com' && password === 'pass'){
-        navigate('/homepage')
-      }
+    let email = data.get('email')
+    let password = data.get('password')
+
+
+    if (email === 'aman@gmail.com' && password === 'pass') {
+      navigate('/homepage')
+    }
   };
 
   return (
@@ -63,7 +65,7 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, boxShadow: 4, borderRadius: '5%', padding: '2rem' }}>
             <TextField
               margin="normal"
               required
@@ -103,7 +105,7 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link onClick={()=>navigate('/signup')} variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
