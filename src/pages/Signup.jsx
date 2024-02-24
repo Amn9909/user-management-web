@@ -13,6 +13,10 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
+import { useCreateUserMutation } from '../redux/apis/api';
+import SimpleSnackbar from '../components/common/SnackBar';
+import { useDispatch, useSelector } from 'react-redux'
+import { showSnackbar } from '../redux/slices/snackbarSlice';
 
 
 function Copyright(props) {
@@ -33,9 +37,11 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+    const [createUserQuery] = useCreateUserMutation()
     const navigate = useNavigate();
+    const dispatch = useDispatch()
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
@@ -52,6 +58,17 @@ export default function SignUp() {
         }
 
         // api call to save data 
+        // 
+
+        if (payload) {
+            const createUserRes = await createUserQuery(payload)
+            if (createUserRes.data) {
+                dispatch(showSnackbar({message : 'signup successfull !', severity : 'success'}))
+                navigate('/signin')
+            } else {
+                dispatch(showSnackbar({message : 'signup failed !', severity : 'error'}))
+            }
+        }
         console.log('create user -> ', payload)
 
     };
@@ -144,6 +161,7 @@ export default function SignUp() {
                 </Box>
                 <Copyright sx={{ mt: 5 }} />
             </Container>
+            <SimpleSnackbar />
         </ThemeProvider>
     );
 }

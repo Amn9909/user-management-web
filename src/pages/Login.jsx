@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { React, userState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,6 +13,11 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
+import { useLoginUserMutation } from '../redux/apis/api';
+import { useDispatch } from 'react-redux'
+import SimpleSnackbar from '../components/common/SnackBar';
+import { showSnackbar } from '../redux/slices/snackbarSlice';
+import { Formik, Field, Form } from "formik";
 
 function Copyright(props) {
   return (
@@ -33,8 +38,12 @@ const defaultTheme = createTheme();
 
 export default function SignIn() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const handleSubmit = (event) => {
+  const [loginUserQuery] = useLoginUserMutation()
+
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
@@ -42,9 +51,15 @@ export default function SignIn() {
     let password = data.get('password')
 
 
-    if (email === 'aman@gmail.com' && password === 'pass') {
+    const loginResponse = await loginUserQuery({ email: email, password: password })
+    if (loginResponse.data) {
+      dispatch(showSnackbar({ message: "Login success", severity: "success" }))
       navigate('/homepage')
+    } else {
+      console.log(loginResponse.error)
+      dispatch(showSnackbar({ message: "Login failed", severity: "error" }))
     }
+
   };
 
   return (
@@ -105,7 +120,7 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link onClick={()=>navigate('/signup')} variant="body2">
+                <Link onClick={() => navigate('/signup')} variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
@@ -114,6 +129,7 @@ export default function SignIn() {
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
+      <SimpleSnackbar />
     </ThemeProvider>
   );
 }
