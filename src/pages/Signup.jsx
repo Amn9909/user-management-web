@@ -17,6 +17,7 @@ import { useCreateUserMutation } from '../redux/apis/api';
 import SimpleSnackbar from '../components/common/SnackBar';
 import { useDispatch, useSelector } from 'react-redux'
 import { showSnackbar } from '../redux/slices/snackbarSlice';
+import PasswordField from '../components/common/CustomPasswordField';
 
 
 function Copyright(props) {
@@ -54,7 +55,8 @@ export default function SignUp() {
             firstName: firstName,
             lastName: lastName,
             password: password,
-            email: email
+            email: email,
+            active: true
         }
 
         // api call to save data 
@@ -63,10 +65,10 @@ export default function SignUp() {
         if (payload) {
             const createUserRes = await createUserQuery(payload)
             if (createUserRes.data) {
-                dispatch(showSnackbar({message : 'signup successfull !', severity : 'success'}))
+                dispatch(showSnackbar({ message: 'signup successfull !', severity: 'success' }))
                 navigate('/signin')
             } else {
-                dispatch(showSnackbar({message : 'signup failed !', severity : 'error'}))
+                dispatch(showSnackbar({ message: 'signup failed !', severity: 'error' }))
             }
         }
         console.log('create user -> ', payload)
@@ -125,15 +127,7 @@ export default function SignUp() {
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    name="password"
-                                    label="Password"
-                                    type="password"
-                                    id="password"
-                                    autoComplete="new-password"
-                                />
+                                <PasswordField item xs={12} />
                             </Grid>
                             <Grid item xs={12}>
                                 <FormControlLabel

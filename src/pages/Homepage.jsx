@@ -52,14 +52,20 @@ const Homepage = () => {
     const handleStatusChange = (userId, status) => {
         try {
             const response = updateUserStatus({ userId: userId, status: !status })
-            dispatch(showSnackbar({message : "Status changed successfully",severity : "success"}))
+            dispatch(showSnackbar({ message: "Status changed successfully", severity: "success" }))
         } catch (error) {
-            dispatch(showSnackbar({message : "Status change failed",severity : "error"}))
+            dispatch(showSnackbar({ message: "Status change failed", severity: "error" }))
         }
     }
 
     const handleClose = () => {
         setShowMsg(false)
+    }
+
+    const maskPass = (pass) => {
+        console.log(pass.length)
+        const maskedPass = '*'.repeat(pass.length);
+        return maskedPass
     }
 
 
@@ -87,7 +93,7 @@ const Homepage = () => {
                             <TableCell align="center">{user?.firstName}</TableCell>
                             <TableCell align="center">{user?.lastName}</TableCell>
                             <TableCell align="center">{user?.email}</TableCell>
-                            <TableCell align="center" >  {showPass[user?.id] ? user?.password : '********'}</TableCell>
+                            <TableCell align="center" >  {showPass[user?.id] ? user?.password : maskPass(user?.password)}</TableCell>
                             <TableCell align="center">
                                 {showPass[user?.id] ? (
                                     <VisibilityOffIcon onClick={() => togglePassVisibility(user?.id)} />

@@ -8,7 +8,6 @@ import { hideSnackbar } from '../../redux/slices/snackbarSlice';
 export default function SimpleSnackbar() {
 
   const snackBarState = useSelector((state) => state.messageAlert)
-  console.log("snackBarState", snackBarState.open)
   const dispatch = useDispatch()
 
   const handleClose = () => {

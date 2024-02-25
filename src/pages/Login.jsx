@@ -18,6 +18,7 @@ import { useDispatch } from 'react-redux'
 import SimpleSnackbar from '../components/common/SnackBar';
 import { showSnackbar } from '../redux/slices/snackbarSlice';
 import { Formik, Field, Form } from "formik";
+import PasswordField from '../components/common/CustomPasswordField';
 
 function Copyright(props) {
   return (
@@ -56,8 +57,7 @@ export default function SignIn() {
       dispatch(showSnackbar({ message: "Login success", severity: "success" }))
       navigate('/homepage')
     } else {
-      console.log(loginResponse.error)
-      dispatch(showSnackbar({ message: "Login failed", severity: "error" }))
+      dispatch(showSnackbar({ message: loginResponse?.error?.data?.message, severity: "error" }))
     }
 
   };
@@ -91,16 +91,7 @@ export default function SignIn() {
               autoComplete="email"
               autoFocus
             />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
+           <PasswordField />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
